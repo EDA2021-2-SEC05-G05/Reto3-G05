@@ -32,19 +32,11 @@ from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
 assert cf
 
-"""
-Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
-los mismos.
-"""
 
-# Construccion de modelos
+def newAnalyzer():
+    analyzer = {'UFOS': None,...
+                }
 
-# Funciones para agregar informacion al catalogo
-
-# Funciones para creacion de datos
-
-# Funciones de consulta
-
-# Funciones utilizadas para comparar elementos dentro de una lista
-
-# Funciones de ordenamiento
+    analyzer['UFOS'] = lt.newList('SINGLE_LINKED', ...)
+  
+    return analyzer

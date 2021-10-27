@@ -27,31 +27,63 @@ from DISClib.ADT import list as lt
 assert cf
 
 
-"""
-La vista se encarga de la interacción con el usuario
-Presenta el menu de opciones y por cada seleccion
-se hace la solicitud al controlador para ejecutar la
-operación solicitada
-"""
+
+ufosfile = 'UFOS//UFOS-utf8-small.csv'
+cont = None
 
 def printMenu():
     print("Bienvenido")
-    print("1- Cargar información en el catálogo")
-    print("2- ")
+    print("1- Inicializar analizador")
+    print("2- Cargar información")
+    print("3- Total avistamientos en una ciudad")
+    print("4- Total avistamientos por duracion")
+    print("5- Total avistamientos por hora/minutos del dia")
+    print("6- Total avistamientos en un rango de fechas")
+    print("7- Total avistamientos de una zona geografica")
+    print("0- Salir")
 
-catalog = None
 
 """
 Menu principal
 """
 while True:
     printMenu()
-    inputs = input('Seleccione una opción para continuar\n')
+    inputs = input('Seleccione una opción para continuar\n>')
+
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
+        cont = controller.init()
 
     elif int(inputs[0]) == 2:
-        pass
+        print("\nCargando información de crimenes ....")
+        #controller.
+
+    elif int(inputs[0]) == 3:
+        print("\nContando cantidad total de avistamientos en una ciudad....")
+        ciudad = input("Ingrese el nombre de la ciudad: ")
+        #total = controller.
+        print("\nTotal de avistamientos de la ciudad: " + str(total))
+
+    elif int(inputs[0]) == 4:
+        print("\nContando avistamientos por duracion....")
+        maximo = input("Limite inferior en segundos: ")
+        minimo = input("Limite superior en segundos: ")
+        #total = controller.
+        #print("\nTotal de avistamientos segun su duracion: " + str(total))
+
+    elif int(inputs[0]) == 5:
+        print("\nContando avistamientos por hora/minutos del dia.... ")
+        inferior = input("Limite inferior en formato (HH: MM): ")
+        superior  = input("Limite superior en formato (HH: MM): ")
+        #Total = controller.
+        #print("\nTotal avistamientos por hora/minutos: " + str(Total))
+
+    elif int(inputs[0]) == 6:
+        print("\nContando avistamientos en un rango de fechas.... ")
+        inferior = input("Limite inferior en formato (AAAA-MM-DD): ")
+        superior  = input("Limite superior en formato (AAAA-MM-DD): ")
+        #Total = controller.
+        #print("\nTotal avistamientos por rango de fechas: " + str(Total))
 
     else:
         sys.exit(0)
