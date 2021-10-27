@@ -32,3 +32,26 @@ El controlador se encarga de mediar entre la vista y el modelo.
 def init():
     analyzer = model.newAnalyzer()
     return analyzer
+
+ufosfile= 'UFOS/UFOS-utf8-small.csv'
+def loadData(analyzer, ufosfile):
+    ufosfile = cf.data_dir + ufosfile
+    input_file = csv.DictReader(open(ufosfile, encoding="utf-8"),
+                                delimiter=",")
+    for ufos in input_file:
+        model.addUFOS(analyzer, ufos)
+    return analyzer
+
+def ufosSize(analyzer):
+    return model.ufosSize(analyzer)
+
+
+def indexHeight(analyzer):
+    return model.indexHeight(analyzer)
+
+
+
+
+
+
+

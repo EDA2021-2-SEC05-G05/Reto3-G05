@@ -28,15 +28,47 @@
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
+from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
 assert cf
 
 
 def newAnalyzer():
-    analyzer = {'UFOS': None,...
+    analyzer = {'UFOS': None
                 }
 
-    analyzer['UFOS'] = lt.newList('SINGLE_LINKED', ...)
+    analyzer['UFOS'] = om.newMap(omaptype="RBT")
   
     return analyzer
+
+
+def addUFOS(analyzer, ufos):
+    exist = om.contains (analyzer["UFOS"], ufos["city"])
+    if exist:
+        x = om.get(analyzer["UFOS"], ufos["city"])
+        value = me.getValue(x)
+        lt.addLast(value, ufos)
+    else:
+        list = lt.newList()
+        lt.addLast(list, ufos)
+        om.put(analyzer["UFOS"], ufos["city"], list)
+    return analyzer
+
+def ufosSize(analyzer):
+    return om.size(analyzer['UFOS'])
+
+
+def indexHeight(analyzer):
+    return om.height(analyzer['UFOS'])
+
+
+
+
+
+
+
+
+
+
+

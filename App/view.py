@@ -23,13 +23,14 @@
 import config as cf
 import sys
 import controller
+from DISClib.DataStructures import mapentry as me
 from DISClib.ADT import list as lt
 assert cf
+from DISClib.ADT import orderedmap as om
 
 
-
-ufosfile = 'UFOS//UFOS-utf8-small.csv'
-cont = None
+ufosfile = 'UFOS/UFOS-utf8-small.csv'
+#cont = None
 
 def printMenu():
     print("Bienvenido")
@@ -52,17 +53,21 @@ while True:
 
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
-        cont = controller.init()
+        catalog = controller.init()
 
     elif int(inputs[0]) == 2:
-        print("\nCargando información de crimenes ....")
-        #controller.
+        print("\nCargando información....")
+        controller.loadData(catalog, ufosfile)
 
     elif int(inputs[0]) == 3:
         print("\nContando cantidad total de avistamientos en una ciudad....")
-        ciudad = input("Ingrese el nombre de la ciudad: ")
+        print('Número de elementos: ' + str(controller.ufosSize(catalog)))
+        print('Altura del arbol: ' + str(controller.indexHeight(catalog)))
+        #a = om.get(catalog["UFOS"], "lake wales")
+        #print(me.getValue(a))
+        #ciudad = input("Ingrese el nombre de la ciudad: ")
         #total = controller.
-        print("\nTotal de avistamientos de la ciudad: " + str(total))
+        #print("\nTotal de avistamientos de la ciudad: " + str(total))
 
     elif int(inputs[0]) == 4:
         print("\nContando avistamientos por duracion....")
