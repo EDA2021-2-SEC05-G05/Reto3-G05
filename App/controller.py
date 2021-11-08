@@ -42,12 +42,24 @@ def loadData(analyzer, ufosfile):
         model.addUFOS(analyzer, ufos)
     return analyzer
 
-def ufosSize(analyzer):
-    return model.ufosSize(analyzer)
+def getrankDurations(catalog, dF, d0):
+    return model.rankDurations(catalog, dF, d0)
+
+def getSbyCity(catalog, ciudad):
+    return model.SbyCity(catalog, ciudad)
+
+def getByDate(catalog, d0, dF):
+    return model.ByDate(catalog, d0, dF)
+
+def getByCoord(catalog, lon0, lonF, lat0, latF):
+    return model.ByCoord(catalog, lon0, lonF, lat0, latF)
+
+def ufosSize(catalog):
+    return model.ufosSize(catalog)
 
 
-def indexHeight(analyzer):
-    return model.indexHeight(analyzer)
+def indexHeight(catalog):
+    return model.indexHeight(catalog)
 
 
 

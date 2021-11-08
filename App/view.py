@@ -23,14 +23,14 @@
 import config as cf
 import sys
 import controller
+from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 from DISClib.ADT import list as lt
 assert cf
 from DISClib.ADT import orderedmap as om
-
+import time
 
 ufosfile = 'UFOS/UFOS-utf8-small.csv'
-#cont = None
 
 def printMenu():
     print("Bienvenido")
@@ -43,6 +43,27 @@ def printMenu():
     print("7- Total avistamientos de una zona geografica")
     print("0- Salir")
 
+
+def printResults (values, max):
+    i = 1
+    while i<=max:
+        sig = lt.getElement(values, i)
+        print("Fecha y hora: ", sig["datetime"], 
+        " | Ciudad, País: ", sig["city"], ", ", sig["country"], 
+        " | Duración (s): ", sig["duration (seconds)"], 
+        " | Forma del objeto: ", sig["shape"], " | Longitud: ", 
+        sig["longitude"], " | Latitud: ", sig["latitude"], "\n")
+        i+=1
+    print("- \n"*3)
+    n = max-1
+    while n >=0:
+        sig = lt.getElement(values, lt.size(values)-n)
+        print("Fecha y hora: ", sig["datetime"], 
+        " | Ciudad, País: ", sig["city"], ", ", sig["country"], 
+        " | Duración (s): ", sig["duration (seconds)"], 
+        " | Forma del objeto: ", sig["shape"], " | Longitud: ", 
+        sig["longitude"], " | Latitud: ", sig["latitude"], "\n")
+        n-=1
 
 """
 Menu principal
@@ -61,21 +82,23 @@ while True:
 
     elif int(inputs[0]) == 3:
         print("\nContando cantidad total de avistamientos en una ciudad....")
-        print('Número de elementos: ' + str(controller.ufosSize(catalog)))
-        print('Altura del arbol: ' + str(controller.indexHeight(catalog)))
-        #a = om.get(catalog["UFOS"], "lake wales")
-        #print(me.getValue(a))
-        #ciudad = input("Ingrese el nombre de la ciudad: ")
-        #total = controller.
-        #print("\nTotal de avistamientos de la ciudad: " + str(total))
-
+        ciudad = input("Ingrese el nombre de la ciudad: \n")
+        start_time = time.process_time()
+        r = controller.getSbyCity(catalog, ciudad)
+        values = om.valueSet(me.getValue(r))
+        printResults(values, 3)
+        stop_time = time.process_time()
+        elapsed_time_mseg = (stop_time - start_time)
+        print(elapsed_time_mseg)
     elif int(inputs[0]) == 4:
-        print("\nContando avistamientos por duracion....")
-        maximo = input("Limite inferior en segundos: ")
-        minimo = input("Limite superior en segundos: ")
-        #total = controller.
-        #print("\nTotal de avistamientos segun su duracion: " + str(total))
-
+        dF = input("Limite inferior en segundos: ")
+        d0 = input("Limite superior en segundos: ")
+        start_time = time.process_time()
+        rDurations = controller.getrankDurations(catalog, dF, d0)
+        printResults(rDurations, 3)
+        stop_time = time.process_time()
+        elapsed_time_mseg = (stop_time - start_time)*1000
+        print(elapsed_time_mseg)
     elif int(inputs[0]) == 5:
         print("\nContando avistamientos por hora/minutos del dia.... ")
         inferior = input("Limite inferior en formato (HH: MM): ")
@@ -85,11 +108,26 @@ while True:
 
     elif int(inputs[0]) == 6:
         print("\nContando avistamientos en un rango de fechas.... ")
-        inferior = input("Limite inferior en formato (AAAA-MM-DD): ")
-        superior  = input("Limite superior en formato (AAAA-MM-DD): ")
-        #Total = controller.
-        #print("\nTotal avistamientos por rango de fechas: " + str(Total))
-
+        d0 = input("Limite inferior en formato (AAAA-MM-DD): ")
+        dF  = input("Limite superior en formato (AAAA-MM-DD): ")
+        start_time = time.process_time()
+        rDate = controller.getByDate(catalog, d0, dF)
+        printResults(rDate, 3)
+        stop_time = time.process_time()
+        elapsed_time_mseg = (stop_time - start_time)*1000
+        print(elapsed_time_mseg)
+    elif int(inputs[0]) == 7:
+        print("Digite las longitudes y latitudes con dos cifras \n")
+        lon0 = input("Ingrese la longitud mínima: ")
+        lonF = input("Ingrese la longitud máxima: ")
+        lat0 = input("Ingrese la latitud mínima: ")
+        latF = input("Ingrese la latitud máxima: ")
+        start_time = time.process_time()
+        rCoord = controller.getByCoord(catalog, float(lon0), float(lonF), float(lat0), float(latF))
+        printResults(rCoord, 5)
+        stop_time = time.process_time()
+        elapsed_time_mseg = (stop_time - start_time)*1000
+        print(elapsed_time_mseg)
     else:
         sys.exit(0)
 sys.exit(0)
