@@ -47,6 +47,9 @@ def loadData(analyzer, ufosfile):
 def getrankDurations(catalog, dF, d0):
     return model.rankDurations(catalog, dF, d0)
 
+def getRankByH_M(catalog, lower, higher):
+    return model.RankByH_M(catalog, lower, higher)
+
 def getSbyCity(catalog, ciudad):
     return model.SbyCity(catalog, ciudad)
 
@@ -59,9 +62,9 @@ def getByCoord(catalog, lon0, lonF, lat0, latF):
 def ufosSize(catalog):
     return model.ufosSize(catalog)
 
-
 def indexHeight(catalog):
     return model.indexHeight(catalog)
+
 
 
 
