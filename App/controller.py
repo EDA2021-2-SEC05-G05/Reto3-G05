@@ -42,6 +42,7 @@ def loadData(analyzer, ufosfile):
                                 delimiter=",")
     for ufos in input_file:
         model.addUFOS(analyzer, ufos)
+    model.ReqExtra(analyzer)
     return analyzer
 
 def getrankDurations(catalog, dF, d0):

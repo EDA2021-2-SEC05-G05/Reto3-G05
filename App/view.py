@@ -84,7 +84,8 @@ while True:
         ciudad = input("Ingrese el nombre de la ciudad: \n")
         start_time = time.process_time()
         r = controller.getSbyCity(catalog, ciudad)
-        values = om.valueSet(me.getValue(r))
+        values = om.valueSet(me.getValue(r[0]))
+        print("La ciudad con más avistamientos es :", r[1], " con ", r[2], " avistamientos")
         printResults(values, 3)
         stop_time = time.process_time()
         elapsed_time_mseg = (stop_time - start_time)
@@ -94,7 +95,8 @@ while True:
         d0 = input("Limite superior en segundos: ")
         start_time = time.process_time()
         rDurations = controller.getrankDurations(catalog, dF, d0)
-        printResults(rDurations, 3)
+        print("La duración máxima es de :", rDurations[1], "segundos con ", rDurations[2], " avistamientos")
+        printResults(rDurations[0], 3)
         stop_time = time.process_time()
         elapsed_time_mseg = (stop_time - start_time)*1000
         print(elapsed_time_mseg)
@@ -104,7 +106,7 @@ while True:
         higher  = input("Limite superior en formato (HH: MM): ")
         start_time = time.process_time()
         final = controller.getRankByH_M(catalog, lower, higher)
-        print("There are "+ str(len(final))+ " sighthings between: "+ str(lower)+ " and "+ str(higher)+ ".")
+        print("There are "+ str(lt.size(final))+ " sighthings between: "+ str(lower)+ " and "+ str(higher)+ ".")
         printResults(final, 3)
         stop_time = time.process_time()
         elapsed_time_mseg = (stop_time - start_time)*1000
@@ -116,6 +118,7 @@ while True:
         dF  = input("Limite superior en formato (AAAA-MM-DD): ")
         start_time = time.process_time()
         rDate = controller.getByDate(catalog, d0, dF)
+        print("El total de avistamientos dentro del rango es de :", lt.size(rDate))
         printResults(rDate, 3)
         stop_time = time.process_time()
         elapsed_time_mseg = (stop_time - start_time)*1000
@@ -129,6 +132,7 @@ while True:
         start_time = time.process_time()
         rCoord = controller.getByCoord(catalog, float(lon0), float(lonF), float(lat0), float(latF))
         SortrCoord = controller.getSortCoord(rCoord)
+        print("El total de avistamientos dentro del rango es de :", lt.size(SortrCoord))
         printResults(SortrCoord, 5)
         stop_time = time.process_time()
         elapsed_time_mseg = (stop_time - start_time)*1000
