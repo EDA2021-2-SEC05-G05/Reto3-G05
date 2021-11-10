@@ -30,7 +30,7 @@ assert cf
 from DISClib.ADT import orderedmap as om
 import time
 
-ufosfile = 'UFOS/UFOS-utf8-small.csv'
+ufosfile = 'UFOS/UFOS-utf8-large.csv'
 
 def printMenu():
     print("Bienvenido")
@@ -124,7 +124,8 @@ while True:
         latF = input("Ingrese la latitud máxima: ")
         start_time = time.process_time()
         rCoord = controller.getByCoord(catalog, float(lon0), float(lonF), float(lat0), float(latF))
-        printResults(rCoord, 5)
+        SortrCoord = controller.getSortCoord(rCoord)
+        printResults(SortrCoord, 5)
         stop_time = time.process_time()
         elapsed_time_mseg = (stop_time - start_time)*1000
         print(elapsed_time_mseg)

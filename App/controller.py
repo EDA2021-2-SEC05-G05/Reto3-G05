@@ -1,4 +1,4 @@
-"""
+﻿"""
  * Copyright 2020, Departamento de sistemas y Computación,
  * Universidad de Los Andes
  *
@@ -45,7 +45,7 @@ def loadData(analyzer, ufosfile):
     return analyzer
 
 def getrankDurations(catalog, dF, d0):
-    return model.rankDurations(catalog, dF, d0)
+    return model.rankDurationsB(catalog, dF, d0)
 
 def getSbyCity(catalog, ciudad):
     return model.SbyCity(catalog, ciudad)
@@ -63,6 +63,8 @@ def ufosSize(catalog):
 def indexHeight(catalog):
     return model.indexHeight(catalog)
 
+def getSortCoord(list):
+    return model.sortCoord(list)
 
 
 

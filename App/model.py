@@ -54,7 +54,7 @@ def newAnalyzer():
 
 def addUFOS(catalog, ufos):
     addCities(catalog, ufos)
-    addDuration(catalog, ufos)
+    addDurationB(catalog, ufos)
     addDate(catalog, ufos)
     addCoord(catalog, ufos)
 
@@ -83,18 +83,27 @@ def addDuration(catalog, ufos):
         om.put(catalog["durations"], float(ufos["duration (seconds)"]), list)
     return catalog
 
-def rankDurations(catalog, d0, dF):
-    ds = catalog["durations"]
-    keys = om.keys(ds, float(d0), float(dF))
-    list = lt.newList()
-    for key in lt.iterator(keys):
-        x = om.get(ds, key)
+def addDurationB(catalog, ufos):
+    cc = ufos["city"], "-", ufos["country"]
+    exist = om.contains(catalog["durations"], float(ufos["duration (seconds)"]))
+    if exist:
+        x = om.get(catalog["durations"], float(ufos["duration (seconds)"]))
         value = me.getValue(x)
-        if key == lt.getElement(keys, 1) or key == lt.getElement(keys, lt.size(keys)):
-            value = mr.sort(value, cmpCityCountry)
-        for sight in lt.iterator(value):
-            lt.addLast(list, sight)
-    return list
+        if om.contains(value, cc):
+            y = om.get(value, cc)
+            ccvalue = me.getValue(y)
+            lt.addLast(ccvalue, ufos)
+        else:
+            cclist = lt.newList()
+            lt.addLast(cclist, ufos)
+            om.put(value, cc, cclist)
+    else:
+        arb = om.newMap(omaptype="RBT")
+        list = lt.newList()
+        lt.addLast(list, ufos)
+        om.put(arb, cc, list)
+        om.put(catalog["durations"], float(ufos["duration (seconds)"]), arb)
+    return catalog
 
 def addDate(catalog, ufos):
     exist = om.contains(catalog["datetimes"], ufos["datetime"][:10])
@@ -113,10 +122,19 @@ def addCoord(catalog, ufos):
     if exist:
         x = om.get(catalog["coords"], round(float(ufos["longitude"]), 2))
         value = me.getValue(x)
-        om.put(value, round(float(ufos["latitude"]), 2), ufos)
+        if om.contains(value, round(float(ufos["latitude"]), 2)):
+            y = om.get(value, round(float(ufos["latitude"]), 2))
+            latvalue = me.getValue(y)
+            lt.addLast(latvalue, ufos)
+        else:
+            latlist = lt.newList()
+            lt.addLast(latlist, ufos)
+            om.put(value, round(float(ufos["latitude"]), 2), latlist)
     else:
         arb = om.newMap(omaptype="RBT")
-        om.put(arb, round(float(ufos["latitude"]), 2), ufos)
+        list = lt.newList()
+        lt.addLast(list, ufos)
+        om.put(arb, round(float(ufos["latitude"]), 2), list)
         om.put(catalog["coords"], round(float(ufos["longitude"]), 2), arb)
     return catalog
 
@@ -146,11 +164,39 @@ def ByCoord(catalog, lon0, lonF, lat0, latF):
         Akeys = om.keys(value, lat0, latF)
         for xkey in lt.iterator(Akeys):
             y = om.get(value, xkey)
-            yvalue = me.getValue(y)
-            lt.addLast(list, yvalue)
+            yvalues = me.getValue(y)
+            for yvalue in lt.iterator(yvalues):
+                lt.addLast(list, yvalue)
     return list
 
+def rankDurations(catalog, d0, dF):
+    ds = catalog["durations"]
+    keys = om.keys(ds, float(d0), float(dF))
+    list = lt.newList()
+    for key in lt.iterator(keys):
+        x = om.get(ds, key)
+        value = me.getValue(x)
+        if key == lt.getElement(keys, 1) or key == lt.getElement(keys, lt.size(keys)):
+            value = mr.sort(value, cmpCityCountry)
+        for sight in lt.iterator(value):
+            lt.addLast(list, sight)
+    return list
 
+def rankDurationsB(catalog, d0, dF):
+    ds = catalog["durations"]
+    keys = om.keys(ds, float(d0), float(dF))
+    list = lt.newList()
+    for key in lt.iterator(keys):
+        x = om.get(ds, key)
+        value = me.getValue(x)
+        Akeys = om.keySet(value)
+        for xkey in lt.iterator(Akeys):
+            y = om.get(value, xkey)
+            yvalues = me.getValue(y)
+            for yvalue in lt.iterator(yvalues):
+                lt.addLast(list, yvalue)
+    return list
+    
 def SbyCity(catalog, ciudad):
     return mp.get(catalog["cities"], ciudad)
 
@@ -167,6 +213,11 @@ def cmpCityCountry (s1, s2):
     s2cc = s2["city"], "-", s2["country"]
     return s1cc<s2cc
 
+def sortCoord(list):
+    return mr.sort(list, cmpLatitude)
+
+def cmpLatitude(l1, l2):
+    return l1["latitude"]<l2["latitude"]
 
 
 
