@@ -64,7 +64,6 @@ def printResults (values, max):
         " | Forma del objeto: ", sig["shape"], " | Longitud: ", 
         sig["longitude"], " | Latitud: ", sig["latitude"], "\n")
         n-=1
-
 """
 Menu principal
 """
@@ -101,10 +100,15 @@ while True:
         print(elapsed_time_mseg)
     elif int(inputs[0]) == 5:
         print("\nContando avistamientos por hora/minutos del dia.... ")
-        inferior = input("Limite inferior en formato (HH: MM): ")
-        superior  = input("Limite superior en formato (HH: MM): ")
-        #Total = controller.
-        #print("\nTotal avistamientos por hora/minutos: " + str(Total))
+        lower = input("Limite inferior en formato (HH: MM): ")
+        higher  = input("Limite superior en formato (HH: MM): ")
+        start_time = time.process_time()
+        final = controller.getRankByH_M(catalog, lower, higher)
+        print("There are "+ str(len(final))+ " sighthings between: "+ str(lower)+ " and "+ str(higher)+ ".")
+        printResults(final, 3)
+        stop_time = time.process_time()
+        elapsed_time_mseg = (stop_time - start_time)*1000
+        print(elapsed_time_mseg)
 
     elif int(inputs[0]) == 6:
         print("\nContando avistamientos en un rango de fechas.... ")

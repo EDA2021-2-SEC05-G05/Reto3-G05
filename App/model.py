@@ -25,6 +25,7 @@
  """
 
 
+from DISClib.DataStructures.bst import values
 import config as cf
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
@@ -32,6 +33,7 @@ from DISClib.ADT import orderedmap as om
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
 from DISClib.Algorithms.Sorting import mergesort as mr
+from datetime import datetime
 assert cf
 
 
@@ -39,6 +41,7 @@ def newAnalyzer():
     catalog = {'UFOS': None,
                 "cities":None,
                 "durations": None
+
                 }
 
     #analyzer['UFOS'] = om.newMap(omaptype="RBT")
@@ -47,7 +50,8 @@ def newAnalyzer():
                                     loadfactor=4.0)
     catalog['durations'] = om.newMap(omaptype="RBT")
     catalog["datetimes"] = om.newMap(omaptype="RBT")  
-    catalog["coords"] = om.newMap(omaptype="RBT")                            
+    catalog["coords"] = om.newMap(omaptype="RBT") 
+    catalog["datetimes_h"] = om.newMap(omaptype="RBT")                    
   
     return catalog
 
@@ -57,6 +61,7 @@ def addUFOS(catalog, ufos):
     addDurationB(catalog, ufos)
     addDate(catalog, ufos)
     addCoord(catalog, ufos)
+    addHour(catalog, ufos)
 
 def addCities(catalog, ufos):
     exist = mp.contains (catalog["cities"], ufos["city"])
@@ -104,6 +109,7 @@ def addDurationB(catalog, ufos):
         om.put(arb, cc, list)
         om.put(catalog["durations"], float(ufos["duration (seconds)"]), arb)
     return catalog
+    
 
 def addDate(catalog, ufos):
     exist = om.contains(catalog["datetimes"], ufos["datetime"][:10])
@@ -115,6 +121,18 @@ def addDate(catalog, ufos):
         arb = om.newMap(omaptype="RBT")
         om.put(arb, ufos["datetime"], ufos)
         om.put(catalog["datetimes"], ufos["datetime"][:10], arb)
+    return catalog
+
+def addHour(catalog, ufos):
+    exist = om.contains(catalog["datetimes_h"], ufos["datetime"][11:19])
+    if exist:
+        x = om.get(catalog["datetimes_h"], ufos["datetime"][11:19])
+        value = me.getValue(x)
+        om.put(value, ufos["datetime"], ufos)
+    else:
+        arb = om.newMap(omaptype="RBT")
+        om.put(arb, ufos["datetime"], ufos)
+        om.put(catalog["datetimes_h"], ufos["datetime"][11:19], arb)
     return catalog
 
 def addCoord(catalog, ufos):
@@ -137,6 +155,20 @@ def addCoord(catalog, ufos):
         om.put(arb, round(float(ufos["latitude"]), 2), list)
         om.put(catalog["coords"], round(float(ufos["longitude"]), 2), arb)
     return catalog
+
+def RankByH_M(catalog, lower, higher):
+    lower_f = lower + ":00"
+    high_f = higher + ":00"
+    dt = catalog["datetimes_h"]
+    keys = om.keys(dt, lower_f, high_f)
+    list = lt.newList()
+    for key in lt.iterator(keys):
+        x = om.get(dt, key)
+        value = me.getValue(x)
+        values = om.valueSet(value)
+        for sight in lt.iterator(values):
+            lt.addLast(list, sight)
+    return list
 
 def ByDate(catalog, d0, dF):
     dt = catalog["datetimes"]
